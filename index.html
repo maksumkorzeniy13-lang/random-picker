@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#111116">
+  <meta name="description" content="Random Picker — простий спосіб випадково обрати один із ваших варіантів.">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Picker">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="format-detection" content="telephone=no">
+  <title>Random Picker — випадковий вибір</title>
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="apple-touch-icon" sizes="180x180" href="./icons/icon-180.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="Random Picker — на головну">
+        <span class="brand-mark" aria-hidden="true">✳</span>
+        <span>random<span class="brand-light">picker</span></span>
+      </a>
+      <span class="topbar-note"><span class="status-dot"></span> Ваш вибір — за мить</span>
+    </header>
+
+    <main>
+      <section class="intro" aria-labelledby="page-title">
+        <p class="eyebrow"><span class="eyebrow-line"></span> МАЛЕНЬКА ДОПОМОГА ДЛЯ РІШЕНЬ</p>
+        <h1 id="page-title">Нехай випадок<br class="mobile-break"> <span>вирішить.</span></h1>
+        <p class="intro-copy">Додайте свої варіанти й дозвольте Random Picker обрати один за вас.</p>
+      </section>
+
+      <div class="workspace">
+        <section class="panel input-panel" aria-labelledby="options-heading">
+          <div class="panel-heading">
+            <div class="heading-copy">
+              <span class="step-number">01</span>
+              <div><h2 id="options-heading">Ваші варіанти</h2><p>Що будемо обирати?</p></div>
+            </div>
+            <span class="count-badge" id="item-count">0 варіантів</span>
+          </div>
+
+          <label class="sr-only" for="options-input">Введіть варіанти, по одному на рядок</label>
+          <textarea id="options-input" placeholder="Наприклад:\nПіца 🍕\nСуші 🍣\nПаста 🍝" rows="5" enterkeyhint="enter" autocapitalize="sentences" spellcheck="false"></textarea>
+          <div class="form-hint"><span class="hint-icon" aria-hidden="true">↵</span> Кожен варіант — з нового рядка</div>
+          <button class="button button-secondary add-button" id="add-options" type="button"><span aria-hidden="true">＋</span> Додати варіанти</button>
+
+          <div class="options-section">
+            <div class="list-heading"><h3>Список</h3><button class="text-button danger-text" id="clear-options" type="button" disabled>Очистити все</button></div>
+            <ul class="option-list" id="option-list" aria-label="Додані варіанти"></ul>
+            <p class="empty-state" id="empty-options">Тут з’являться ваші варіанти</p>
+          </div>
+        </section>
+
+        <section class="right-column" aria-label="Вибір та історія">
+          <section class="panel picker-panel" aria-labelledby="picker-heading">
+            <div class="mode-switch" role="tablist" aria-label="Режим вибору">
+              <button class="mode-tab is-active" id="normal-mode-tab" type="button" role="tab" aria-selected="true" aria-controls="normal-mode-content">Звичайний вибір</button>
+              <button class="mode-tab" id="wheel-mode-tab" type="button" role="tab" aria-selected="false" aria-controls="wheel-mode-content">Колесо фортуни</button>
+            </div>
+            <div class="panel-heading">
+              <div class="heading-copy"><span class="step-number">02</span><div><h2 id="picker-heading">Час обирати</h2><p>Довіртеся випадку</p></div></div>
+              <span class="sparkle" aria-hidden="true">✦</span>
+            </div>
+            <div id="normal-mode-content" role="tabpanel" aria-labelledby="normal-mode-tab">
+              <div class="result-card" id="result-card" aria-live="polite" aria-atomic="true">
+                <span class="result-label">ВАШ РЕЗУЛЬТАТ</span>
+                <p class="result-value placeholder" id="result-value">Тут буде ваш вибір</p>
+              </div>
+              <p class="error-message" id="error-message" role="alert" hidden>Додайте хоча б один варіант, щоб почати.</p>
+              <button class="button button-primary pick-button" id="pick-button" type="button"><span>Випадковий вибір</span><span class="button-arrow" aria-hidden="true">↗</span></button>
+              <button class="copy-button" id="copy-button" type="button" disabled><span aria-hidden="true">▢</span> Копіювати результат</button>
+              <span class="copy-status" id="copy-status" role="status" aria-live="polite"></span>
+            </div>
+            <div id="wheel-mode-content" role="tabpanel" aria-labelledby="wheel-mode-tab" hidden>
+              <div class="wheel-stage">
+                <span class="wheel-pointer" aria-hidden="true"></span>
+                <canvas id="wheel-canvas" width="520" height="520" aria-label="Колесо фортуни з варіантами"></canvas>
+                <p class="wheel-empty" id="wheel-empty">Додайте варіанти, щоб наповнити колесо</p>
+              </div>
+              <p class="error-message" id="wheel-error" role="alert" hidden>Додайте хоча б один варіант, щоб крутити колесо.</p>
+              <button class="button button-primary pick-button" id="spin-button" type="button" disabled><span>Крутити колесо</span><span class="button-arrow" aria-hidden="true">↻</span></button>
+              <p class="wheel-winner" id="wheel-winner" aria-live="polite" aria-atomic="true" hidden></p>
+            </div>
+          </section>
+
+          <section class="panel history-panel" aria-labelledby="history-heading">
+            <div class="list-heading history-heading"><div class="history-title"><span class="history-icon" aria-hidden="true">◷</span><h2 id="history-heading">Історія</h2><span class="history-count" id="history-count">0</span></div><button class="text-button" id="clear-history" type="button" disabled>Очистити</button></div>
+            <ul class="history-list" id="history-list" aria-label="Історія виборів"></ul>
+            <p class="history-empty" id="empty-history">Ваші результати з’являться тут</p>
+          </section>
+        </section>
+      </div>
+    </main>
+    <footer><span>Зроблено для рішень, які не хочуть чекати.</span><span class="footer-mark">✳ &nbsp; RANDOM PICKER</span></footer>
+  </div>
+</body>
+</html>
